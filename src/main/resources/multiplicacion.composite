@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-15"?>
+<composite xmlns="http://www.osoa.org/xmlns/sca/1.0" 
+	xmlns:frascati="http://frascati.ow2.org/xmlns/sca/1.1" name="MultiplicacionMatrices">
+
+	<service name="operar" promote="cliente/operar"/>
+	
+
+	<component name="cliente">
+		<service name="operar">
+			<interface.java interface="java.lang.Runnable"/>
+		</service>
+		<implementation.java class="icesi.cliente.Client"/>
+		<property name="path">src/main/resources/Config.properties</property>
+		<property name="keyM1">m1</property>
+		<property name="keyM2">m2</property>
+		<property name="keyResult">result</property>
+		
+	</component>
+
+	<component name="multiplicacionMatrices">
+		<service name="multiplicar">
+			<interface.java interface="interfaces.IMatrixOperations"/>
+		</service>
+
+		<implementation.java class="icesi.multiplicacion.MultiplicateMatrix"/>
+	</component>
+
+	<component name="multiplicacionVectores">
+		<service name="multiplicarVectores">
+			<interface.java interface="interfaces.IMultiplicationVectors"/>
+		</service>
+		
+		<implementation.java class="icesi.mulVectores.MultiplicationVectors"/>
+	</component>
+
+	<wire source="cliente/servicio" target="multiplicacionMatrices/multiplicar"/>
+	<wire source="multiplicacionMatrices/mVectors" target="multiplicacionVectores/multiplicarVectores"/>
+
+</composite>
